@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lex Detective — Autonomous Contract Conflict & Loophole Engine</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo">⚖️</div>
+        <div>
+          <h1 class="brand-title">LEX DETECTIVE</h1>
+          <span class="brand-pill">Autonomous Contract Conflict &amp; Loophole Engine</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <select id="preset-selector" class="select-input" aria-label="Select Legal Case">
+          <!-- Populated dynamically via JS -->
+        </select>
+        
+        <button id="btn-run-audit" class="btn btn-primary" title="Execute First-Order Logic Deduction">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          ⚡ Run Case Trial
+        </button>
+
+        <button id="btn-export-report" class="btn btn-outline" title="Export Settlement & Audit Report">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export Report
+        </button>
+
+        <button id="btn-theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode">
+          <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- View Switcher Tabs -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <button class="nav-tab active" data-tab="tab-studio">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Case Dossier &amp; Evidence Board
+      </button>
+
+      <button class="nav-tab" data-tab="tab-prover">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+        Courtroom Trial &amp; Proof Tree
+      </button>
+
+      <button class="nav-tab" data-tab="tab-pipeline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        Clausal Logic Pipeline (9 Steps)
+      </button>
+
+      <button class="nav-tab" data-tab="tab-report">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
+        Settlement &amp; Audit Report
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Panels -->
+  <main class="main-wrapper">
+
+    <!-- Active Case Story & Live Verdict Banner -->
+    <section class="hero-card">
+      <div class="hero-meta">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
+          <h2 id="hero-title" style="margin-bottom:0;">Loading Dispute Case...</h2>
+          <span class="badge badge-amber" id="hero-stakes" style="font-size:0.75rem; font-weight:700;">$10B Dispute</span>
+        </div>
+        <p id="hero-desc">Deductive theorem proving across contractual obligations and scenario facts.</p>
+      </div>
+      <div class="hero-badges" id="hero-badges">
+        <!-- Live Badges -->
+      </div>
+    </section>
+
+    <!-- Tab 1: Case Dossier & Live Evidence Board -->
+    <section id="tab-studio" class="view-panel active">
+      <div class="grid-two-col">
+        <!-- Left: Contract Clauses -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                Contract Terms &amp; Formal Logic Representation
+              </h3>
+              <button id="btn-add-clause-modal" class="btn btn-outline" style="font-size:0.75rem; padding: 0.25rem 0.55rem;">
+                + Add Clause
+              </button>
+            </div>
+            <div id="clause-list-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Evidence Board -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+                Active Dispute Evidence Board
+              </h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
+              Empirical incident facts ingested into the deductive engine.
+            </p>
+            <div id="facts-list-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Background Legal Axioms
+              </h3>
+            </div>
+            <div id="axiom-list-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Courtroom Trial & Visual Proof Tree -->
+    <section id="tab-prover" class="view-panel">
+      <div class="card">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <h3 class="card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              Deductive Refutation Proof Engine
+            </h3>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="btn-mode-conflict" class="btn btn-primary" style="font-size:0.8rem; padding: 0.3rem 0.65rem;">
+                Loophole &amp; Conflict Mode
+              </button>
+              <button id="btn-mode-breach" class="btn btn-outline" style="font-size:0.8rem; padding: 0.3rem 0.65rem;">
+                Breach Liability Trial
+              </button>
+            </div>
+          </div>
+          <div id="prover-status-badge">
+            <!-- Verdict Badge -->
+          </div>
+        </div>
+
+        <!-- Interactive Visual DAG Container -->
+        <div class="graph-container" id="graph-container">
+          <div class="graph-toolbar">
+            <button class="graph-tool-btn" id="btn-zoom-in" title="Zoom In">+</button>
+            <button class="graph-tool-btn" id="btn-zoom-out" title="Zoom Out">-</button>
+            <button class="graph-tool-btn" id="btn-zoom-reset" title="Reset View">Reset</button>
+          </div>
+          <svg id="proof-dag-svg" class="graph-svg">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--text-muted)" />
+              </marker>
+              <marker id="arrow-contradiction" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--danger-accent)" />
+              </marker>
+            </defs>
+            <g id="dag-viewport"></g>
+          </svg>
+        </div>
+
+        <!-- Step-by-Step Resolution Table -->
+        <div style="margin-top: 1.5rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem;">
+            Step-by-Step Deduction Trace (First-Order Unification &amp; Resolvents)
+          </h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Step</th>
+                <th style="width: 140px;">Parents</th>
+                <th>Resolved Literals &amp; Substitution θ</th>
+                <th>Resolvent Clause</th>
+                <th>Legal &amp; Logical Rationale</th>
+              </tr>
+            </thead>
+            <tbody id="resolution-table-body">
+              <!-- Rows inserted by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Clausal Logic Pipeline (9 Steps) -->
+    <section id="tab-pipeline" class="view-panel">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            9-Step Clausal Normal Form (CNF) Transformation Pipeline
+          </h3>
+          <div>
+            <label for="pipeline-clause-select" style="font-size:0.85rem; margin-right: 0.5rem; color:var(--text-secondary);">Select Clause:</label>
+            <select id="pipeline-clause-select" class="select-input">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Watch the engine convert human legal terms into standardized first-order clauses ready for automated theorem proving.
+        </p>
+
+        <div id="pipeline-steps-container">
+          <!-- Accordion of 9 steps rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Formal Settlement & Audit Report -->
+    <section id="tab-report" class="view-panel">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+            Executive Legal Settlement &amp; Audit Report
+          </h3>
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="btn-copy-markdown" class="btn btn-outline" style="font-size: 0.8rem;">
+              Copy Markdown
+            </button>
+            <button id="btn-print-report" class="btn btn-primary" style="font-size: 0.8rem;">
+              Print / Save PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="risk-meter">
+          <div class="risk-score-circle" id="risk-score-circle">
+            <span id="risk-score-num">100</span>
+            <small>RISK</small>
+          </div>
+          <div>
+            <h4 id="risk-headline" style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.25rem;">
+              Critical Contract Contradiction &amp; Liability
+            </h4>
+            <p id="risk-summary" style="font-size: 0.875rem; color: var(--text-secondary);">
+              First-order resolution refutation derived the empty clause [], confirming that the contract contains an irreconcilable conflict or active liability breach.
+            </p>
+          </div>
+        </div>
+
+        <div id="report-markdown-preview" style="background-color: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.25rem; font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; font-family: var(--font-mono);">
+          <!-- Markdown text rendered here -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Add Clause Modal -->
+  <div class="modal-overlay" id="add-clause-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; font-weight: 600;">Add Custom Contract Clause</h3>
+        <button id="btn-close-modal" style="background:none; border:none; font-size: 1.2rem; cursor:pointer; color:var(--text-muted);">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-clause-title">Clause Title / Section</label>
+        <input type="text" id="input-clause-title" class="form-input" placeholder="e.g. Sec. 9.1 — Data Localization Mandate">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-clause-text">Plain-English Legal Text</label>
+        <textarea id="input-clause-text" class="form-textarea" placeholder="e.g. Recipient shall not disclose confidential data to any outside party."></textarea>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <button id="btn-auto-translate" class="btn btn-outline" style="font-size: 0.8rem;">
+          ✨ Auto-Translate to Logic Formula
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-clause-fopl">First-Order Predicate Logic Formula</label>
+        <input type="text" id="input-clause-fopl" class="form-input" placeholder="forall x, y: (Predicate(x) -> Permitted(y))" style="font-family: var(--font-mono); font-size: 0.85rem;">
+      </div>
+      <div class="form-actions">
+        <button id="btn-cancel-clause" class="btn btn-outline">Cancel</button>
+        <button id="btn-save-clause" class="btn btn-primary">Add to Case</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>Lex Detective &bull; Autonomous Legal Conflict &amp; Loophole Engine &bull; First-Order Logic Theorem Prover</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
